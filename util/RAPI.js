@@ -64,7 +64,7 @@ const RAPI = {
         let isGet = params.Method && (String(params.Method).toLowerCase() == "get");
         console.log(data);
         axios[isGet ? "get" : "post"](url, data)
-            .then(d => callback(RAPI._parse(d)))
+            .then(d => callback(RAPI._parse((d || {}).data)))
             .catch(error => console.error(error));
     },
 

@@ -44,6 +44,8 @@ const processAppIds = (appIds, callback) => {
         { name: "send_emails", batch_size: 10 }
     ];
 
+    jobs.reverse();
+
     runJobs(id, jobs, () => { processAppIds(appIds, callback); });
 };
 
@@ -65,8 +67,7 @@ const getApplications = (count, callback, lowerBoundary, appIds) => {
     });
 };
 
-agenda.define("job8", { priority: 'high', concurrency: 10 }, function (job, done) {
-    console.log("job started");
+agenda.define("job18", { priority: 'high', concurrency: 10 }, function (job, done) {
     getApplications(100, (appIds) => {
         console.log(appIds);
         processAppIds(appIds, () => { done(); });
@@ -76,7 +77,7 @@ agenda.define("job8", { priority: 'high', concurrency: 10 }, function (job, done
 
 exports.initialize = function (){
     agenda.on('ready', () => {
-        agenda.every('1 minutes', ['job8']);
+        agenda.every('1 minutes', ['job18']);
 
         agenda.start();
     });

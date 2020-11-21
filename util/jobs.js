@@ -1,5 +1,6 @@
 const globalSettings = require('./global_settings').settings;
 const Agenda = require('agenda');
+const RAPI = require('./RAPI');
 
 var agenda = new Agenda({
     name: "CliqMind Jobs",
@@ -17,7 +18,7 @@ var agenda = new Agenda({
 agenda.define("job1", { priority: 'high', concurrency: 10 }, function (job, done) {
     done();
     
-    console.log('job1 done');
+    RAPI.get_applications();
 });
 
 

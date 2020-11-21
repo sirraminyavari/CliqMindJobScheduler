@@ -41,6 +41,7 @@ const RAPI = {
     })(),
 
     _parse: function (input) {
+        console.log(input);
         try { return RAPI.get_type(input) == "json" ? input : JSON.parse(String(input || "{}")); }
         catch (e) { return { error: "json parse error" }; }
     },
@@ -61,9 +62,8 @@ const RAPI = {
         data.Ticket = RAPI.Ticket ? RAPI.Ticket : null;
 
         let isGet = params.Method && (String(params.Method).toLowerCase() == "get");
-
-        axios[isGet ? "get" : "post"]
-            .get(url, data)
+        console.log(data);
+        axios[isGet ? "get" : "post"](url, data)
             .then(d => callback(RAPI._parse(d)))
             .catch(error => console.error(error));
     },
@@ -100,8 +100,8 @@ const RAPI = {
         RAPI.send_request(data, callback, { Method: "GET", Action: action });
     },
 
-    get_applications: function (data, callback) {
-        RAPI.post(RAPI.EndPoints.API + "get_applications", data, callback);
+    get_all_applications: function (data, callback) {
+        RAPI.post(RAPI.EndPoints.API + "get_all_applications", data, callback);
     },
 
     run_job: function (data, callback) {
@@ -109,4 +109,4 @@ const RAPI = {
     }
 };
 
-exports = RAPI;
+exports.RAPI = RAPI;

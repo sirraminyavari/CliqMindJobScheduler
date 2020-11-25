@@ -67,7 +67,7 @@ const getApplications = (count, callback, lowerBoundary, appIds) => {
     });
 };
 
-agenda.define("job18", { priority: 'high', concurrency: 10 }, function (job, done) {
+agenda.define("cliqmind_update_job", { priority: 'high', concurrency: 10 }, function (job, done) {
     getApplications(100, (appIds) => {
         console.log(appIds);
         processAppIds(appIds, () => { done(); });
@@ -77,7 +77,7 @@ agenda.define("job18", { priority: 'high', concurrency: 10 }, function (job, don
 
 exports.initialize = function (){
     agenda.on('ready', () => {
-        agenda.every('1 minutes', ['job18']);
+        agenda.every('1 hours', ['cliqmind_update_job']);
 
         agenda.start();
     });

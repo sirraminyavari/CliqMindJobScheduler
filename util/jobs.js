@@ -69,7 +69,6 @@ const getApplications = (count, callback, lowerBoundary, appIds) => {
 
 agenda.define("cliqmind_update_job", { priority: 'high', concurrency: 10 }, function (job, done) {
     getApplications(100, (appIds) => {
-        console.log(appIds);
         processAppIds(appIds, () => { done(); });
     });
 });

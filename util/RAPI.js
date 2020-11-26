@@ -41,7 +41,6 @@ const RAPI = {
     })(),
 
     _parse: function (input) {
-        console.log(input);
         try { return RAPI.get_type(input) == "json" ? input : JSON.parse(String(input || "{}")); }
         catch (e) { return { error: "json parse error" }; }
     },
@@ -62,7 +61,7 @@ const RAPI = {
         data.Ticket = RAPI.Ticket ? RAPI.Ticket : null;
 
         let isGet = params.Method && (String(params.Method).toLowerCase() == "get");
-        console.log({ url: url, data: data });
+        
         axios[isGet ? "get" : "post"](url, data)
             .then(d => callback(RAPI._parse((d || {}).data)))
             .catch(error => console.error(error));

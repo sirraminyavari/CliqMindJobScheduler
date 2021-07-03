@@ -24,6 +24,8 @@ const runJobs = (appId, jobs, callback) => {
 
     var job = jobs.pop();
 
+    console.log({  ApplicationID: appId, Options: JSON.stringify(job), Time: String(new Date()) });
+
     RAPI.run_job({  ApplicationID: appId, Options: JSON.stringify(job) }, () => {
         runJobs(appId, jobs, callback);
     });
@@ -68,6 +70,8 @@ const getApplications = (count, callback, lowerBoundary, appIds) => {
 };
 
 agenda.define("cliqmind_update_job", { priority: 'high', concurrency: 10 }, function (job, done) {
+    console.log("update job started at: " + String(new Date()));
+
     getApplications(100, (appIds) => {
         processAppIds(appIds, () => { done(); });
     });

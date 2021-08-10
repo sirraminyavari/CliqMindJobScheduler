@@ -38,6 +38,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+process
+  .on("unhandledRejection", (reason, p) => {
+    console.error("Unhandled Rejection at:", p, "reason:", reason);
+  })
+  .on('uncaughtException', err => {
+    console.error(err, 'Uncaught Exception thrown');
+  });
+
 require('./util/jobs').initialize();
 
 module.exports = app;

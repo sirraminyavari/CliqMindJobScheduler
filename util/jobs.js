@@ -1,6 +1,8 @@
 const globalSettings = require('./global_settings').settings;
-const Agenda = require('agenda');
+//const Agenda = require('agenda');
 const RAPI = require('./RAPI').RAPI;
+
+const Queue = require('bull');
 
 RAPI.init({ 
     BaseURL: globalSettings.WebApp.BaseURL,
@@ -8,6 +10,7 @@ RAPI.init({
     Password: globalSettings.WebApp.Password 
 });
 
+/*
 var agenda = new Agenda({
     name: "CliqMind Jobs",
     defaultConcurrency: 10,
@@ -18,6 +21,7 @@ var agenda = new Agenda({
         options: { server: { auto_reconnect: true } }
     }
 });
+*/
 
 const runJobs = (appId, jobs, callback) => {
     if(!jobs || !jobs.length) return callback();
@@ -37,10 +41,10 @@ const processAppIds = (appIds, callback) => {
     let id = appIds.pop();
 
     var jobs = [
-        { name: "index_update", type: "Node", batch_size: 100 },
-        { name: "index_update", type: "NodeType", batch_size: 100 },
-        { name: "index_update", type: "User", batch_size: 100 },
-        { name: "index_update", type: "File", batch_size: 100 },
+        { name: "index_update", type: "Node", batch_size: 10 },
+        { name: "index_update", type: "NodeType", batch_size: 10 },
+        { name: "index_update", type: "User", batch_size: 10 },
+        { name: "index_update", type: "File", batch_size: 10 },
         { name: "extract_file_contents", count: 2 },
         { name: "remove_temporary_files"  },
         { name: "send_emails", batch_size: 10 }
@@ -69,6 +73,7 @@ const getApplications = (count, callback, lowerBoundary, appIds) => {
     });
 };
 
+/*
 agenda.define("cliqmind_update_job", { priority: 'high', concurrency: 10 }, function (job, done) {
     console.log("update job started at: " + String(new Date()));
 
@@ -76,12 +81,38 @@ agenda.define("cliqmind_update_job", { priority: 'high', concurrency: 10 }, func
         processAppIds(appIds, () => { done(); });
     });
 });
-
+*/
 
 exports.initialize = function (){
+    const jobQueue = new Queue('job queue', { 
+        redis: { 
+            host: globalSettings.Redis.Host, 
+            port: globalSettings.Redis.Port, 
+            password: globalSettings.Redis.Password 
+        } 
+    });
+    
+    jobQueue.process(function(job, done) {
+        let data = job.data;
+
+        getApplications(100, (appIds) => {
+            processAppIds(appIds, () => { 
+                //let error = null;
+                //let result = { result: "ok"};
+                //done(error, result);
+
+                done(); 
+            });
+        });
+    });
+    
+    jobQueue.add({ msg: "what is you?" }, { repeat: { cron: "* */3 * * *" } });
+    
+    /*
     agenda.on('ready', () => {
         agenda.every('1 hours', ['cliqmind_update_job']);
 
         agenda.start();
     });
+    */
 };

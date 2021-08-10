@@ -112,7 +112,7 @@ exports.initialize = function (){
 
     console.log("job queue started!");
     
-    jobQueue.add({ msg: "what is you?" }, { repeat: { cron: "* */3 * * *" } });
+    jobQueue.add({ msg: "what is you?" }, { repeat: { cron: "2 */3 * * *" } });
     
     /*
     agenda.on('ready', () => {

@@ -46,25 +46,33 @@ const RAPI = {
     },
 
     _ajax_request: function (data, callback, params) {
-        var url = RAPI._BaseURL;
-        if (url) {
-            if (url[url.length - 1] != '/') url += '/';
-            url += params.Action;
+        try {
+            var url = RAPI._BaseURL;
+            if (url) {
+                if (url[url.length - 1] != '/') url += '/';
+                url += params.Action;
+            }
+
+            if (RAPI.get_type(callback) != "function") return;
+            
+            params = params || {};
+            data = data || {};
+
+            data.time_stamp = (new Date()).getTime();
+            data.Ticket = RAPI.Ticket ? RAPI.Ticket : null;
+
+            let isGet = params.Method && (String(params.Method).toLowerCase() == "get");
+            
+            axios[isGet ? "get" : "post"](url, data)
+                .then(d => callback(RAPI._parse((d || {}).data)))
+                .catch(error => { 
+                    callback({ error: "web request failed!" });
+                    console.error(error);
+                });
         }
-
-        if (RAPI.get_type(callback) != "function") return;
-        
-        params = params || {};
-        data = data || {};
-
-        data.time_stamp = (new Date()).getTime();
-        data.Ticket = RAPI.Ticket ? RAPI.Ticket : null;
-
-        let isGet = params.Method && (String(params.Method).toLowerCase() == "get");
-        
-        axios[isGet ? "get" : "post"](url, data)
-            .then(d => callback(RAPI._parse((d || {}).data)))
-            .catch(error => console.error(error));
+        catch(er){
+            console.error({ type: "caught error", time: new Date().getDate(), error: er });
+        }
     },
 
     authenticate: function (callback) {

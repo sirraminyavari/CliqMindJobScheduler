@@ -40,9 +40,11 @@ app.use(function(err, req, res, next) {
 
 process
   .on("unhandledRejection", (reason, p) => {
+    console.log("Unhandled Rejection at:", p, "reason:", reason);
     console.error("Unhandled Rejection at:", p, "reason:", reason);
   })
   .on('uncaughtException', err => {
+    console.log(err, 'Uncaught Exception thrown');
     console.error(err, 'Uncaught Exception thrown');
   });
 

@@ -84,6 +84,8 @@ agenda.define("cliqmind_update_job", { priority: 'high', concurrency: 10 }, func
 */
 
 exports.initialize = function (){
+    console.log("jobs initialized!");
+
     const jobQueue = new Queue('job queue', { 
         redis: { 
             host: globalSettings.Redis.Host, 
@@ -95,6 +97,8 @@ exports.initialize = function (){
     jobQueue.process(function(job, done) {
         let data = job.data;
 
+        console.log("update job running at: " + (new Date()).getDate());
+
         getApplications(100, (appIds) => {
             processAppIds(appIds, () => { 
                 //let error = null;
@@ -105,6 +109,8 @@ exports.initialize = function (){
             });
         });
     });
+
+    console.log("job queue started!");
     
     jobQueue.add({ msg: "what is you?" }, { repeat: { cron: "* */3 * * *" } });
     

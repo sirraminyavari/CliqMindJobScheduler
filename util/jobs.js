@@ -16,7 +16,7 @@ var agenda = new Agenda({
     defaultConcurrency: 10,
     maxConcurrency: 20,
     db: {
-        address: globalSettings.DBURL, 
+        address: globalSettings.MongoDBURL, 
         collection: "scheduled_jobs", 
         options: { server: { auto_reconnect: true } }
     }
@@ -98,7 +98,7 @@ exports.initialize = function (){
         let data = job.data;
 
         console.log("update job running at: " + (new Date()).getDate());
-
+        
         getApplications(100, (appIds) => {
             processAppIds(appIds, () => { 
                 //let error = null;

@@ -97,7 +97,7 @@ exports.initialize = function (){
     jobQueue.process(function(job, done) {
         let data = job.data;
 
-        console.log("update job running at: " + (new Date()).getDate());
+        console.log("update job running at: '" + String(new Date()) + "'");
         
         getApplications(100, (appIds) => {
             processAppIds(appIds, () => { 

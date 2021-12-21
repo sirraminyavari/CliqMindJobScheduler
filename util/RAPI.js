@@ -71,6 +71,7 @@ const RAPI = {
                 });
         }
         catch(er){
+            callback({ error: "web request failed!" });
             console.error({ type: "caught error", time: new Date().getDate(), error: er });
         }
     },

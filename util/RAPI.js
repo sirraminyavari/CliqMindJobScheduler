@@ -67,12 +67,12 @@ const RAPI = {
                 .then(d => callback(RAPI._parse((d || {}).data)))
                 .catch(error => { 
                     callback({ error: "web request failed!" });
-                    console.error(error);
+                    console.log(error);
                 });
         }
         catch(er){
             callback({ error: "web request failed!" });
-            console.error({ type: "caught error", time: new Date().getDate(), error: er });
+            console.log({ type: "caught error", time: new Date().getDate(), error: er });
         }
     },
 

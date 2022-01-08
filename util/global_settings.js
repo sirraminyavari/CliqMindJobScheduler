@@ -5,7 +5,7 @@ const getSettings = (dic, prefix) => {
 
     for (let key in dic) {
         if (!dic[key] || ((dic[key] || "_").constructor == "gesi".constructor)){
-            retDic[key] = dic[key] === false ? dic[key] : dic[key] || process.env[(prefix + key).toUpperCase()];
+            retDic[key] = dic[key] === false ? dic[key] : process.env[(prefix + key).toUpperCase()] || dic[key];
         }
         else if (dic[key].constructor == {}.constructor){
             retDic[key] = getSettings(dic[key], prefix + key);

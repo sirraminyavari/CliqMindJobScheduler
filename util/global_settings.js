@@ -19,7 +19,7 @@ const getSettings = (dic, prefix) => {
 exports.settings = getSettings({
     MongoDBURL: "mongodb://localhost:27017/cliqmind_scheduler",
     Redis: { 
-        Host: "127.0.0.1",
+        Host: "redis",
         Port: "6379",
         Password: ""
     },

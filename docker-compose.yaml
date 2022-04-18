@@ -1,0 +1,20 @@
+version: '3.1'
+services:
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+     - "3000"
+    environment:
+      - WEBAPP_BASEURL=${WEBAPP_BASEURL}
+      - WEBAPP_USERNAME=${WEBAPP_USERNAME}
+      - WEBAPP_PASSWORD=${WEBAPP_PASSWORD}  
+    volumes:
+     - .:/code
+     - /code/node_modules
+    restart: always
+    depends_on:
+     - redis
+  redis:
+    image: redis:alpine

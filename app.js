@@ -50,4 +50,7 @@ process
 
 require('./util/jobs').initialize();
 
-module.exports = app;
+
+app.listen(3000, () => {
+  console.log('Scheduler listening on port 3000!');
+});
